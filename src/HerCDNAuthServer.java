@@ -11,7 +11,10 @@ public class HerCDNAuthServer {
     public static void main(String argv[]) throws Exception
     {
         Records rec = new Records("herCDN.com", "www.herCDN.com", "CN");
-        Records rec2 = new Records("www.herCDN.com", "IPwww", "A");
+        Records rec2 = new Records("www.herCDN.com", "IPwww.herCDN.com", "A");
+        Records test[] = new Records[2];
+        test[0] = rec;
+        test[1] = rec2;
 
         DatagramSocket serverSocket = new DatagramSocket(9877);
 
@@ -21,20 +24,31 @@ public class HerCDNAuthServer {
         while(true) {
             DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
             serverSocket.receive(receivePacket);
-
+            System.out.println("herCDN.com Packet Received \n");
             String hostname = new String(receivePacket.getData());
+
+            System.out.println("herCDN.com Packet Data: " + hostname + "\n");
 
             InetAddress IPAddress = receivePacket.getAddress();
 
             int port = receivePacket.getPort();
 
 
-            System.out.println("Checking if hostname exists...");
-            if(hostname.contains(rec.getName())){
-                sendData = rec.getValue().getBytes();
-                System.out.println("Success");
+            for(Records r : test){
+                String name = hostname;
+                if(hostname.contains(r.getName()) && !(r.getType().equals("A"))){
+                    hostname = r.getValue();
+                }
+                else if(hostname.contains(r.getName()) && (r.getType().equals("A"))){
+                    hostname = r.getValue();
+                    System.out.println("Found IP Address for " + name + "\n");
+                    sendData = hostname.getBytes();
+                    break;
+                }
+                else if(!hostname.contains(r.getName())){
+                    sendData = "No Such hostname Exists".getBytes();
+                }
             }
-            else sendData = "No Such hostname Exists".getBytes();
 
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
 

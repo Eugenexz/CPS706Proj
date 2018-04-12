@@ -3,11 +3,30 @@ import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.Scanner;
 
 class UDPClientTest {
 
     public static void main(String argv[]) throws Exception
     {
+        int port;
+
+        System.out.print("Do you want to connect to his(1) or her(2)? Enter the corresponding number: ");
+        Scanner sc = new Scanner(System.in);
+        int connection = sc.nextInt();
+        if(connection == 1) {
+            port = 9876;
+            System.out.println("Connected to hisCinema Auth Server...");
+        }
+        else if(connection == 2){
+            port = 9877;
+            System.out.println("Connected to herCDN Auth Server...");
+        }
+        else{
+            port = 9876;
+            System.out.println("Failed to read. Connected to hisCinema Auth Server...");
+        }
+
         while(true) {
             BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
 
@@ -22,7 +41,7 @@ class UDPClientTest {
 
             sendData = sentence.getBytes();
 
-            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
+            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
 
             clientSocket.send(sendPacket);
 
@@ -33,6 +52,7 @@ class UDPClientTest {
             String servermsg = new String(receivePacket.getData());
 
             System.out.println("FROM SERVER: " + servermsg);
+            clientSocket.close();
         }
 
     }
