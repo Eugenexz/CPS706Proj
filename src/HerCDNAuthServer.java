@@ -10,9 +10,9 @@ public class HerCDNAuthServer {
 
     public static void main(String argv[]) throws Exception
     {
-        Records rec = new Records("herCDN.com", "www.herCDN.com", "CN");
-        Records rec2 = new Records("www.herCDN.com", "IPwww.herCDN.com", "A");
-        Records test[] = new Records[2];
+        Record rec = new Record("herCDN.com", "www.herCDN.com", "CN");
+        Record rec2 = new Record("www.herCDN.com", "IPwww.herCDN.com", "A");
+        Record test[] = new Record[2];
         test[0] = rec;
         test[1] = rec2;
 
@@ -34,7 +34,7 @@ public class HerCDNAuthServer {
             int port = receivePacket.getPort();
 
 
-            for(Records r : test){
+            for(Record r : test){
                 String name = hostname;
                 if(hostname.contains(r.getName()) && !(r.getType().equals("A"))){
                     hostname = r.getValue();

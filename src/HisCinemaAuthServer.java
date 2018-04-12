@@ -7,7 +7,7 @@ class HisCinemaAuthServer {
 
     public static void main(String argv[]) throws Exception
     {
-        Records rec = new Records("video.netcinema.com", "herCDN.com", "R");
+        Record rec = new Record("video.netcinema.com", "herCDN.com", "R");
 
         DatagramSocket serverSocket = new DatagramSocket(9876);
 
