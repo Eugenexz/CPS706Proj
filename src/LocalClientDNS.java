@@ -15,11 +15,13 @@ public class LocalClientDNS {
         records.add(new Record("hiscinema.com", "NShiscinema.com", "NS"));
         records.add(new Record("NShiscinema.com", "localhost", "A"));
 
+        int portHisCinema = 9876;
+        int portHerCinema = 9877;
 
         byte[] receiveData = new byte[1024];
         byte[] sendData = new byte[1024];
 
-        DatagramSocket localDNSSocket = new DatagramSocket(9877);
+        DatagramSocket localDNSSocket = new DatagramSocket(9878);
 
 
         while(true) {
