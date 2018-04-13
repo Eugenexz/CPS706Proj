@@ -19,12 +19,10 @@ public class TCPHisCinemaWebServer {
             Socket connectionSocket = welcomeSocket.accept();
 
             System.out.println("Connected\n");
-            BufferedReader inFromClient =
-                    new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+            BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
 
 
-            DataOutputStream outToClient =
-                    new DataOutputStream(connectionSocket.getOutputStream());
+            DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 
 
             clientSentence = inFromClient.readLine();

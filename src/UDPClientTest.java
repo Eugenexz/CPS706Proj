@@ -11,7 +11,7 @@ class UDPClientTest {
     {
         int port;
 
-        System.out.print("Do you want to connect to his(1) or her(2)? Enter the corresponding number: ");
+        System.out.print("Do you want to connect to his(1), her(2), or DNS(3)? Enter the corresponding number: ");
         Scanner sc = new Scanner(System.in);
         int connection = sc.nextInt();
         if(connection == 1) {
@@ -22,9 +22,13 @@ class UDPClientTest {
             port = 9877;
             System.out.println("Connected to herCDN Auth Server...");
         }
+        else if(connection == 3){
+            port = 9878;
+            System.out.println("Connected to DNS...");
+        }
         else{
-            port = 9876;
-            System.out.println("Failed to read. Connected to hisCinema Auth Server...");
+            port = 9878;
+            System.out.println("Connected to DNS...");
         }
 
         while(true) {
