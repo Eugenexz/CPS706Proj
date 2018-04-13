@@ -56,20 +56,22 @@ public class LocalClientDNS {
                     sendData = hostname.getBytes();
                     DatagramPacket hisPacket = new DatagramPacket(sendData, sendData.length, IPAddress, portHisCinema);
                     localDNSSocket.send(hisPacket);
-
                     receivePacket = new DatagramPacket(receiveData, receiveData.length);
                     localDNSSocket.receive(receivePacket);
-                    System.out.println("hisPacket: " + new String(receivePacket.getData(),0, receivePacket.getLength()) + "\n");
+                    hostname = new String(receivePacket.getData(),0, receivePacket.getLength());
+                    System.out.println("hisPacket: " + hostname + "\n");
 
                     DatagramPacket herPacket = new DatagramPacket(receivePacket.getData(), sendData.length, IPAddress, portHerCinema);
                     localDNSSocket.send(herPacket);
                     receivePacket = new DatagramPacket(receiveData, receiveData.length);
                     localDNSSocket.receive(receivePacket);
-                    System.out.println("herPacket: " + new String(herPacket.getData(),0, herPacket.getLength()) + "\n");
+                    hostname = new String(receivePacket.getData(),0, receivePacket.getLength());
+                    System.out.println("herPacket: " + hostname + "\n");
 
                     sendData = hostname.getBytes();
                 }
             }
+
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
 
             localDNSSocket.send(sendPacket);

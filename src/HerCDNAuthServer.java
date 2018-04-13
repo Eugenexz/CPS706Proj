@@ -25,7 +25,7 @@ public class HerCDNAuthServer {
             DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
             serverSocket.receive(receivePacket);
             System.out.println("herCDN.com Packet Received \n");
-            String hostname = new String(receivePacket.getData());
+            String hostname = new String( receivePacket.getData(),0, receivePacket.getLength());
 
             System.out.println("herCDN.com Packet Data: " + hostname + "\n");
 

@@ -1,13 +1,18 @@
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
 
 class HisCinemaAuthServer {
 
 
     public static void main(String argv[]) throws Exception
     {
-        Record rec = new Record("video.netcinema.com", "herCDN.com", "R");
+        List<Record> records = new ArrayList<>();
+        records.add(new Record("video.netcinema.com", "herCDN.com", "R"));
+        records.add(new Record("herCDN.com", "www.herCDN.com", "CN"));
+        records.add(new Record("www.herCDN.com", "localhost", "A"));
 
         DatagramSocket serverSocket = new DatagramSocket(9876);
 
@@ -18,7 +23,7 @@ class HisCinemaAuthServer {
             DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
             serverSocket.receive(receivePacket);
             System.out.println("hisCinema.com Packet Received \n");
-            String hostname = new String(receivePacket.getData());
+            String hostname = new String( receivePacket.getData(),0, receivePacket.getLength());
 
             System.out.println("hisCinema.com Packet Data: " + hostname + "\n");
 
@@ -28,19 +33,23 @@ class HisCinemaAuthServer {
 
 
             System.out.println("Checking if hostname exists... \n");
-            if(hostname.contains(rec.getName())){
-                sendData = rec.getValue().getBytes();
-                System.out.println("Success\n");
-            }
-            else {
-                System.out.println("Failure\n");
-                sendData = "No Such hostname Exists".getBytes();
+
+            for(Record record : records){
+
+                if(hostname.contains(record.getName())){
+                    sendData = record.getValue().getBytes();
+                    System.out.println("Success\n");
+                    break;
+                }
+                else {
+                    System.out.println("Failure\n");
+                    sendData = "No Such hostname Exists".getBytes();
+                }
             }
 
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
 
             serverSocket.send(sendPacket);
-
         }
     }
 } 
