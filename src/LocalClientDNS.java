@@ -51,20 +51,31 @@ public class LocalClientDNS {
                     break;
                 }
                 else if(!hostname.contains(record.getName())){
-                    sendData = "No Such hostname Exists".getBytes();
+                    //sendData = "No Such hostname Exists".getBytes();
+
+                    sendData = hostname.getBytes();
+                    DatagramPacket hisPacket = new DatagramPacket(sendData, sendData.length, IPAddress, portHisCinema);
+                    localDNSSocket.send(hisPacket);
+
+                    receivePacket = new DatagramPacket(receiveData, receiveData.length);
+                    localDNSSocket.receive(receivePacket);
+                    System.out.println("hisPacket: " + new String(receivePacket.getData(),0, receivePacket.getLength()) + "\n");
+
+                    DatagramPacket herPacket = new DatagramPacket(receivePacket.getData(), sendData.length, IPAddress, portHerCinema);
+                    localDNSSocket.send(herPacket);
+                    receivePacket = new DatagramPacket(receiveData, receiveData.length);
+                    localDNSSocket.receive(receivePacket);
+                    System.out.println("herPacket: " + new String(herPacket.getData(),0, herPacket.getLength()) + "\n");
+
+                    sendData = hostname.getBytes();
                 }
             }
-
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
 
             localDNSSocket.send(sendPacket);
-
         }
 
-
     }
-
-
 
 }
 
