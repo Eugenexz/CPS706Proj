@@ -55,7 +55,7 @@ class UDPClientTest {
 
             String servermsg = new String(receivePacket.getData());
 
-            System.out.println("FROM SERVER: " + servermsg);
+            System.out.println("FROM DNS SERVER: " + servermsg);
             clientSocket.close();
         }
 

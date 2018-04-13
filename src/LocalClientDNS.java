@@ -48,27 +48,32 @@ public class LocalClientDNS {
                     hostname = record.getValue();
                     System.out.println("Found IP Address for " + hostname + "\n");
                     sendData = hostname.getBytes();
-                    break;
                 }
                 else if(!hostname.contains(record.getName())){
                     //sendData = "No Such hostname Exists".getBytes();
-
+                    System.out.println("Contacting hisCinemaDNS for Type R or V record... hisCinemaDNS port: " + portHisCinema);
                     sendData = hostname.getBytes();
                     DatagramPacket hisPacket = new DatagramPacket(sendData, sendData.length, IPAddress, portHisCinema);
                     localDNSSocket.send(hisPacket);
                     receivePacket = new DatagramPacket(receiveData, receiveData.length);
                     localDNSSocket.receive(receivePacket);
                     hostname = new String(receivePacket.getData(),0, receivePacket.getLength());
+                    System.out.println("Received Type NS Record: \"" + hostname + "\" from hisCinemaDNS port: " + portHisCinema);
                     System.out.println("hisPacket: " + hostname + "\n");
 
+                    System.out.println("Being redirected...");
+
+                    System.out.println("Contacting herCDNDNS for Type A... herCDNDNS port: " + portHerCinema);
                     DatagramPacket herPacket = new DatagramPacket(receivePacket.getData(), sendData.length, IPAddress, portHerCinema);
                     localDNSSocket.send(herPacket);
                     receivePacket = new DatagramPacket(receiveData, receiveData.length);
                     localDNSSocket.receive(receivePacket);
                     hostname = new String(receivePacket.getData(),0, receivePacket.getLength());
+                    System.out.println("Received Type A Record: \"" + hostname + "\" from herCDNDNS port: " + portHerCinema);
                     System.out.println("herPacket: " + hostname + "\n");
 
                     sendData = hostname.getBytes();
+                    break;
                 }
             }
 
