@@ -10,8 +10,8 @@ public class HisCinemaWebServer implements Runnable{
     public static void main(String arg[])
     {
         try {
-            server = new ServerSocket(8080);
-            System.out.println("Server is listening for incoming requests...");
+            server = new ServerSocket(9875);
+            System.out.println("HisCinema is listening for incoming requests...");
             Thread t1 = new Thread(new HisCinemaWebServer());
             t1.start();
         }
@@ -27,12 +27,12 @@ public class HisCinemaWebServer implements Runnable{
 
             try {
                 Socket client = server.accept();
-                System.out.println(client.getRemoteSocketAddress() + " has established a connection.");
+                System.out.println("Client has established a connection with www.hiscinema.com");
 
                 Thread t2 = new Thread(new HisCinemaWebServer());
                 t2.start();
-                new Thread(new SocketHandler(client)).start();
 
+                new Thread(new SocketHandler(client)).start();
 
             } catch (Exception e) {
                 e.printStackTrace();
