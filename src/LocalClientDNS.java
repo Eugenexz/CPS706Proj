@@ -13,10 +13,10 @@ public class LocalClientDNS {
         records.add(new Record("herCDN.com", "NSherCDN.com", "NS"));
         records.add(new Record("NSherCDN.com", "localhost", "A"));
         records.add(new Record("hiscinema.com", "NShiscinema.com", "NS"));
-        records.add(new Record("NShiscinema.com", "localhost", "A"));
+        records.add(new Record("NShiscinema.com", "127.0.0.1", "A"));
 
         int portHisCinema = 9876;
-        int portHerCinema = 9877;
+        int portHerCDN = 9877;
 
         byte[] receiveData = new byte[1024];
         byte[] sendData = new byte[1024];
@@ -53,8 +53,11 @@ public class LocalClientDNS {
                     //sendData = "No Such hostname Exists".getBytes();
                     System.out.println("Contacting hisCinemaDNS for Type R or V record... hisCinemaDNS port: " + portHisCinema);
                     sendData = hostname.getBytes();
-                    DatagramPacket hisPacket = new DatagramPacket(sendData, sendData.length, IPAddress, portHisCinema);
+                    byte[] hisIpAddr = new byte[]{127, 0, 0, 1};
+                    InetAddress hisAddr = InetAddress.getByAddress(hisIpAddr);
+                    DatagramPacket hisPacket = new DatagramPacket(sendData, sendData.length, hisAddr, portHisCinema);
                     localDNSSocket.send(hisPacket);
+
                     receivePacket = new DatagramPacket(receiveData, receiveData.length);
                     localDNSSocket.receive(receivePacket);
                     hostname = new String(receivePacket.getData(),0, receivePacket.getLength());
@@ -63,13 +66,16 @@ public class LocalClientDNS {
 
                     System.out.println("Being redirected...");
 
-                    System.out.println("Contacting herCDNDNS for Type A... herCDNDNS port: " + portHerCinema);
-                    DatagramPacket herPacket = new DatagramPacket(receivePacket.getData(), sendData.length, IPAddress, portHerCinema);
+                    System.out.println("Contacting herCDNDNS for Type A... herCDNDNS port: " + portHerCDN);
+                    byte[] herIpAddr = new byte[]{127, 0, 0, 1};
+                    InetAddress herAddr = InetAddress.getByAddress(herIpAddr);
+                    DatagramPacket herPacket = new DatagramPacket(receivePacket.getData(), sendData.length, herAddr, portHerCDN);
                     localDNSSocket.send(herPacket);
+
                     receivePacket = new DatagramPacket(receiveData, receiveData.length);
                     localDNSSocket.receive(receivePacket);
                     hostname = new String(receivePacket.getData(),0, receivePacket.getLength());
-                    System.out.println("Received Type A Record: \"" + hostname + "\" from herCDNDNS port: " + portHerCinema);
+                    System.out.println("Received Type A Record: \"" + hostname + "\" from herCDNDNS port: " + portHerCDN);
                     System.out.println("herPacket: " + hostname + "\n");
 
                     sendData = hostname.getBytes();

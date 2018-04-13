@@ -9,8 +9,9 @@ public class HisCinemaWebServer implements Runnable{
 
     public static void main(String arg[])
     {
+        int hisWebPort = 9875;
         try {
-            server = new ServerSocket(9875);
+            server = new ServerSocket(hisWebPort);
             System.out.println("HisCinema is listening for incoming requests...");
             Thread t1 = new Thread(new HisCinemaWebServer());
             t1.start();

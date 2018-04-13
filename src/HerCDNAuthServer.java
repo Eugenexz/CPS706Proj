@@ -10,13 +10,14 @@ public class HerCDNAuthServer {
 
     public static void main(String argv[]) throws Exception
     {
+        int herAuthport = 9877;
         Record rec = new Record("herCDN.com", "www.herCDN.com", "CN");
-        Record rec2 = new Record("www.herCDN.com", "IPwww.herCDN.com", "A");
+        Record rec2 = new Record("www.herCDN.com", "localhost", "A");
         Record test[] = new Record[2];
         test[0] = rec;
         test[1] = rec2;
 
-        DatagramSocket serverSocket = new DatagramSocket(9877);
+        DatagramSocket serverSocket = new DatagramSocket(herAuthport);
 
         byte[] receiveData = new byte[1024];
         byte[] sendData = new byte[1024];

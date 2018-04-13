@@ -9,12 +9,14 @@ class HisCinemaAuthServer {
 
     public static void main(String argv[]) throws Exception
     {
+        int hisAuthPort = 9876;
+
         List<Record> records = new ArrayList<>();
-        records.add(new Record("video.netcinema.com", "herCDN.com", "R"));
+        records.add(new Record("video.hiscinema.com", "herCDN.com", "R"));
         records.add(new Record("herCDN.com", "www.herCDN.com", "CN"));
         records.add(new Record("www.herCDN.com", "localhost", "A"));
 
-        DatagramSocket serverSocket = new DatagramSocket(9876);
+        DatagramSocket serverSocket = new DatagramSocket(hisAuthPort);
 
         byte[] receiveData = new byte[1024];
         byte[] sendData = new byte[1024];
