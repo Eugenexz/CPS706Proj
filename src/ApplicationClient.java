@@ -12,7 +12,6 @@ class ApplicationClient {
         String url = "";
         String dnsResponse = "";
         String fileName = "";
-        String pathName ="C:\\Users\\John\\Desktop\\CPS706\\";
 
         int port;
         int ddnsport = 9878;
@@ -114,7 +113,7 @@ class ApplicationClient {
 
                 Socket clientSocket = new Socket(dnsResponse, port);
                 DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
-                FileOutputStream fileStream = new FileOutputStream(pathName + fileName);
+                FileOutputStream fileStream = new FileOutputStream(fileName);
                 InputStream inFromServer = clientSocket.getInputStream();
                 BufferedOutputStream outToClient = new BufferedOutputStream(fileStream);
                 byte [] byteArray  = new byte [99999];
@@ -123,7 +122,6 @@ class ApplicationClient {
 
                 System.out.println("Retrieving file from www.herCDN.com...");
 
-                //Not sure if this works. Suppose to transfer the bytes
                 while(bytesRead < inFromServer.available()){
                     bytesRead =
                             inFromServer.read(byteArray, current, (byteArray.length-current));

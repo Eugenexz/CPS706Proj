@@ -6,36 +6,50 @@ class HerCDNContentServer {
 
         int herWebport = 9874;
 
-        String clientSentence;
+        DataInputStream input, istream;
+        PrintStream ostream;
+        Socket connectionSocket;
+        String path = null;
 
         //Creates listener socket
         ServerSocket welcomeSocket = new ServerSocket(herWebport);
 
         while (true) {
-            Socket connectionSocket = welcomeSocket.accept();
 
-            BufferedReader inFromClient =
-                    new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+            try{
+                connectionSocket = welcomeSocket.accept();
+                ostream = new PrintStream(connectionSocket.getOutputStream());
+                istream = new DataInputStream(connectionSocket.getInputStream());
 
-            DataOutputStream outToClient =
-                    new DataOutputStream(connectionSocket.getOutputStream());
+                path = istream.readLine();
+                if ( path != null) {
+                    File file = new File(path);
 
-            //Reads from client
-            clientSentence = inFromClient.readLine();
+                    if (file.exists()) {
+                        try {
+                            input = new DataInputStream(new FileInputStream(file));
 
-            //Creates file with the specified file name
-            File herCDNFile = new File ("C:\\Users\\John\\IdeaProjects\\CPS706Proj\\" + clientSentence);
+                            int len = (int) file.length();
+                            byte buffer[] = new byte[len];
+                            input.readFully(buffer);
 
-            //Creates new streams to send file to client
-            FileInputStream fileStream = new FileInputStream(herCDNFile);
-            BufferedInputStream bufferedIS = new BufferedInputStream(fileStream);
+                            ostream.write(buffer, 0, len);
+                            input.close();
 
-            byte [] bytearray  = new byte [(int)herCDNFile.length()];
+                        } catch (Exception e) {
+                            ostream.print("Can not read " + path);
+                        }
+                        ostream.flush();
+                    } else
+                        ostream.print(path + " Not found");
 
-            bufferedIS.read(bytearray,0,bytearray.length);
-            outToClient.write(bytearray,0,bytearray.length);
+                }
+                connectionSocket.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
 
-            outToClient.flush();
         }
     }
 }

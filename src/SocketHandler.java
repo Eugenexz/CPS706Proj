@@ -36,11 +36,11 @@ public class SocketHandler implements Runnable{
                         input.close();
 
                     } catch (Exception e) {
-                        writeErrorHeader(ostream, "<h1>Can not read " + path + "</h1>");
+                        writeErrorHeader(ostream, "Can not read " + path);
                     }
                     ostream.flush();
                 } else
-                    writeErrorHeader(ostream, "<h1>" + path + " Not found </h1>");
+                    writeErrorHeader(ostream, path + " Not found");
             }
             client.close();
         }
